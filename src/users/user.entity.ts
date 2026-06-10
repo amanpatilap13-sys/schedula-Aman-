@@ -1,16 +1,7 @@
-<<<<<<< HEAD
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  OneToOne,
-} from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToOne } from 'typeorm';
 
 import { Doctor } from '../doctor/doctor.entity';
 import { Patient } from '../patient/patient.entity';
-=======
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
->>>>>>> c2b0c1e (Implement role based authentication system)
 
 export enum Role {
   DOCTOR = 'DOCTOR',
@@ -35,8 +26,6 @@ export class User {
     type: 'text',
   })
   role: Role;
-<<<<<<< HEAD
-
   @OneToOne(() => Doctor, {
     nullable: true,
   })
@@ -47,6 +36,3 @@ export class User {
   })
   patientProfile: Patient;
 }
-=======
-}
->>>>>>> c2b0c1e (Implement role based authentication system)

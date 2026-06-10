@@ -21,87 +21,62 @@ export class DoctorService {
     private usersService: UsersService,
   ) {}
 
-  async createProfile(
-    userId: number,
-    createDoctorDto: CreateDoctorDto,
-  ) {
-    const existingProfile =
-      await this.doctorRepository.findOne({
-        where: {
-          user: { id: userId },
-        },
-        relations: { user: true },
-      });
+  async createProfile(userId: number, createDoctorDto: CreateDoctorDto) {
+    const existingProfile = await this.doctorRepository.findOne({
+      where: {
+        user: { id: userId },
+      },
+      relations: { user: true },
+    });
 
     if (existingProfile) {
-      throw new ConflictException(
-        'Doctor profile already exists',
-      );
+      throw new ConflictException('Doctor profile already exists');
     }
 
-    const user =
-      await this.usersService.findById(
-        userId,
-      );
+    const user = await this.usersService.findById(userId);
 
     if (!user) {
-      throw new NotFoundException(
-        'User not found',
-      );
+      throw new NotFoundException('User not found');
     }
 
-    const doctor =
-      this.doctorRepository.create({
-        ...createDoctorDto,
-        user,
-      });
+    const doctor = this.doctorRepository.create({
+      ...createDoctorDto,
+      user,
+    });
 
-    return this.doctorRepository.save(
-      doctor,
-    );
+    return this.doctorRepository.save(doctor);
   }
 
   async getProfile(userId: number) {
-    const profile =
-      await this.doctorRepository.findOne({
-        where: {
-          user: { id: userId },
-        },
-        relations: { user: true },
-      });
+    const profile = await this.doctorRepository.findOne({
+      where: {
+        user: { id: userId },
+      },
+      relations: { user: true },
+    });
 
     if (!profile) {
-      throw new NotFoundException(
-        'Doctor profile not found',
-      );
+      throw new NotFoundException('Doctor profile not found');
     }
 
     return profile;
   }
 
-  async updateProfile(
-    userId: number,
-    updateDoctorDto: UpdateDoctorDto,
-  ) {
-    const profile =
-      await this.doctorRepository.findOne({
-        where: {
-          user: { id: userId },
-        },
-        relations: { user: true },
-      });
+  async updateProfile(userId: number, updateDoctorDto: UpdateDoctorDto) {
+    const profile = await this.doctorRepository.findOne({
+      where: {
+        user: { id: userId },
+      },
+      relations: { user: true },
+    });
 
     if (!profile) {
-      throw new NotFoundException(
-        'Doctor profile not found',
-      );
+      throw new NotFoundException('Doctor profile not found');
     }
 
     Object.assign(profile, updateDoctorDto);
 
-    return this.doctorRepository.save(
-      profile,
-    );
+    return this.doctorRepository.save(profile);
   }
 
   async findAll(
@@ -111,32 +86,21 @@ export class DoctorService {
     limit = 10,
   ) {
     if (page < 1 || limit < 1) {
-      throw new BadRequestException(
-        'Page and limit must be greater than 0',
-      );
+      throw new BadRequestException('Page and limit must be greater than 0');
     }
 
-    const query =
-      this.doctorRepository.createQueryBuilder(
-        'doctor',
-      );
+    const query = this.doctorRepository.createQueryBuilder('doctor');
 
     if (search) {
-      query.andWhere(
-        'LOWER(doctor.fullName) LIKE LOWER(:search)',
-        {
-          search: `%${search}%`,
-        },
-      );
+      query.andWhere('LOWER(doctor.fullName) LIKE LOWER(:search)', {
+        search: `%${search}%`,
+      });
     }
 
     if (specialization) {
-      query.andWhere(
-        'LOWER(doctor.specialization) = LOWER(:specialization)',
-        {
-          specialization,
-        },
-      );
+      query.andWhere('LOWER(doctor.specialization) = LOWER(:specialization)', {
+        specialization,
+      });
     }
 
     query.skip((page - 1) * limit);
@@ -146,15 +110,12 @@ export class DoctorService {
   }
 
   async findOne(id: number) {
-    const doctor =
-      await this.doctorRepository.findOne({
-        where: { id },
-      });
+    const doctor = await this.doctorRepository.findOne({
+      where: { id },
+    });
 
     if (!doctor) {
-      throw new NotFoundException(
-        'Doctor not found',
-      );
+      throw new NotFoundException('Doctor not found');
     }
 
     return doctor;

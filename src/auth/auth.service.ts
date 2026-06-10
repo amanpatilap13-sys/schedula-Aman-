@@ -19,18 +19,13 @@ export class AuthService {
   ) {}
 
   async signup(signupDto: SignupDto) {
-    const existingUser = await this.usersService.findByEmail(
-      signupDto.email,
-    );
+    const existingUser = await this.usersService.findByEmail(signupDto.email);
 
     if (existingUser) {
       throw new ConflictException('Email already exists');
     }
 
-    const hashedPassword = await bcrypt.hash(
-      signupDto.password,
-      10,
-    );
+    const hashedPassword = await bcrypt.hash(signupDto.password, 10);
 
     const user = await this.usersService.create({
       name: signupDto.name,
@@ -46,14 +41,10 @@ export class AuthService {
   }
 
   async login(loginDto: LoginDto) {
-    const user = await this.usersService.findByEmail(
-      loginDto.email,
-    );
+    const user = await this.usersService.findByEmail(loginDto.email);
 
     if (!user) {
-      throw new UnauthorizedException(
-        'Invalid credentials',
-      );
+      throw new UnauthorizedException('Invalid credentials');
     }
 
     const isPasswordValid = await bcrypt.compare(
@@ -62,9 +53,7 @@ export class AuthService {
     );
 
     if (!isPasswordValid) {
-      throw new UnauthorizedException(
-        'Invalid credentials',
-      );
+      throw new UnauthorizedException('Invalid credentials');
     }
 
     const payload = {

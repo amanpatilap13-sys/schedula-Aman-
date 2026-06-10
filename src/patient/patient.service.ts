@@ -20,10 +20,7 @@ export class PatientService {
     private usersService: UsersService,
   ) {}
 
-  async createProfile(
-    userId: number,
-    createPatientDto: CreatePatientDto,
-  ) {
+  async createProfile(userId: number, createPatientDto: CreatePatientDto) {
     const existingProfile = await this.patientRepository.findOne({
       where: {
         user: { id: userId },
@@ -31,9 +28,7 @@ export class PatientService {
     });
 
     if (existingProfile) {
-      throw new ConflictException(
-        'Patient profile already exists',
-      );
+      throw new ConflictException('Patient profile already exists');
     }
 
     const user = await this.usersService.findById(userId);
@@ -58,18 +53,13 @@ export class PatientService {
     });
 
     if (!patient) {
-      throw new NotFoundException(
-        'Patient profile not found',
-      );
+      throw new NotFoundException('Patient profile not found');
     }
 
     return patient;
   }
 
-  async updateProfile(
-    userId: number,
-    updatePatientDto: UpdatePatientDto,
-  ) {
+  async updateProfile(userId: number, updatePatientDto: UpdatePatientDto) {
     const patient = await this.patientRepository.findOne({
       where: {
         user: { id: userId },
@@ -78,9 +68,7 @@ export class PatientService {
     });
 
     if (!patient) {
-      throw new NotFoundException(
-        'Patient profile not found',
-      );
+      throw new NotFoundException('Patient profile not found');
     }
 
     Object.assign(patient, updatePatientDto);

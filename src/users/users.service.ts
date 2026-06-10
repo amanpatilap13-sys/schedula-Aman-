@@ -11,40 +11,20 @@ export class UsersService {
     private usersRepository: Repository<User>,
   ) {}
 
-<<<<<<< HEAD
-  async create(
-    userData: Partial<User>,
-  ): Promise<User> {
-    const user =
-      this.usersRepository.create(userData);
-
-    return this.usersRepository.save(user);
-  }
-
-  async findByEmail(
-    email: string,
-  ): Promise<User | null> {
-=======
   async create(userData: Partial<User>): Promise<User> {
     const user = this.usersRepository.create(userData);
+
     return this.usersRepository.save(user);
   }
 
   async findByEmail(email: string): Promise<User | null> {
->>>>>>> c2b0c1e (Implement role based authentication system)
     return this.usersRepository.findOne({
       where: { email },
     });
   }
-<<<<<<< HEAD
-
-  async findById(
-    id: number,
-  ): Promise<User | null> {
+  async findById(id: number): Promise<User | null> {
     return this.usersRepository.findOne({
       where: { id },
     });
   }
-=======
->>>>>>> c2b0c1e (Implement role based authentication system)
 }

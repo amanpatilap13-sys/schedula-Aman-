@@ -27,19 +27,14 @@
     "@nestjs/platform-express": "^11.0.1",
     "@nestjs/typeorm": "^11.0.1",
     "bcrypt": "^6.0.0",
-
     "better-sqlite3": "^12.10.0",
-    c2b0c1e (Implement role based authentication system)
     "class-transformer": "^0.5.1",
     "class-validator": "^0.15.1",
     "passport": "^0.7.0",
     "passport-jwt": "^4.0.1",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
-    "sqlite3": "^5.1.7"
-    "sqlite3": "^5.1.7",
     "typeorm": "^0.3.25"
-c2b0c1e (Implement role based authentication system)
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.2.0",
@@ -51,6 +46,7 @@ c2b0c1e (Implement role based authentication system)
     "@types/express": "^5.0.0",
     "@types/jest": "^30.0.0",
     "@types/node": "^24.0.0",
+    "@types/passport-jwt": "^4.0.1",
     "@types/supertest": "^7.0.0",
     "eslint": "^9.18.0",
     "eslint-config-prettier": "^10.0.1",
@@ -64,8 +60,6 @@ c2b0c1e (Implement role based authentication system)
     "ts-loader": "^9.5.2",
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
-    "typeorm": "^1.0.0",
-c2b0c1e (Implement role based authentication system)
     "typescript": "^5.7.3",
     "typescript-eslint": "^8.20.0"
   },
