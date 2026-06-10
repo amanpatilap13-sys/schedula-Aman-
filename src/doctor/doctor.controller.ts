@@ -8,6 +8,7 @@ import {
   Body,
   Request,
   UseGuards,
+  ParseIntPipe,
 } from '@nestjs/common';
 
 import { UpdateDoctorDto } from './dto/update-doctor.dto';
@@ -70,7 +71,7 @@ export class DoctorController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.doctorService.findOne(Number(id));
+  findOne(@Param('id', ParseIntPipe) id: number) {
+    return this.doctorService.findOne(id);
   }
 }
