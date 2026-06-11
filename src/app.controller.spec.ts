@@ -15,8 +15,10 @@ describe('AppController', () => {
   });
 
   describe('root', () => {
-    it('should return "Hello World!"', () => {
-      expect(appController.getHello()).toBe('Hello World!');
+    it('should return "Schedula backend API Running Sucessfully"', () => {
+      expect(appController.getHello()).toBe(
+        'Schedula backend API Running Sucessfully',
+      );
     });
   });
 });

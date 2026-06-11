@@ -4,9 +4,12 @@ import {
   Column,
   OneToOne,
   JoinColumn,
+  OneToMany,
 } from 'typeorm';
 
 import { User } from '../users/user.entity';
+import { RecurringAvailability } from './recurring-availability.entity';
+import { CustomAvailability } from './custom-availability.entity';
 
 @Entity()
 export class Doctor {
@@ -28,7 +31,7 @@ export class Doctor {
   @Column('float')
   consultationFee: number;
 
-  @Column()
+  @Column({ nullable: true })
   availability: string;
 
   @Column({ nullable: true })
@@ -37,4 +40,10 @@ export class Doctor {
   @OneToOne(() => User)
   @JoinColumn()
   user: User;
+
+  @OneToMany(() => RecurringAvailability, (ra) => ra.doctor)
+  recurringAvailabilities: RecurringAvailability[];
+
+  @OneToMany(() => CustomAvailability, (ca) => ca.doctor)
+  customAvailabilities: CustomAvailability[];
 }
