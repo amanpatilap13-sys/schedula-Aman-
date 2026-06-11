@@ -47,4 +47,3 @@ export class Doctor {
   @OneToMany(() => CustomAvailability, (ca) => ca.doctor)
   customAvailabilities: CustomAvailability[];
 }
-

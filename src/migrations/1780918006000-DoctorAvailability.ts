@@ -29,7 +29,7 @@ export class DoctorAvailability1780918006000 implements MigrationInterface {
 
     // 3. Alter doctor table to make availability nullable in SQLite
     await queryRunner.query('PRAGMA foreign_keys=OFF;');
-    
+
     await queryRunner.query(`
       CREATE TABLE "doctor_new" (
         "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,

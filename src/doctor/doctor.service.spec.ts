@@ -6,7 +6,11 @@ import { Doctor } from './doctor.entity';
 import { RecurringAvailability } from './recurring-availability.entity';
 import { CustomAvailability } from './custom-availability.entity';
 import { UsersService } from '../users/users.service';
-import { BadRequestException, ConflictException, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  NotFoundException,
+} from '@nestjs/common';
 
 describe('DoctorService (Availability)', () => {
   let service: DoctorService;
@@ -151,9 +155,9 @@ describe('DoctorService (Availability)', () => {
   describe('getAvailabilityByDate', () => {
     it('should throw NotFoundException if doctor does not exist', async () => {
       jest.spyOn(doctorRepo, 'findOne').mockResolvedValue(null);
-      await expect(service.getAvailabilityByDate(999, '2026-06-15')).rejects.toThrow(
-        NotFoundException,
-      );
+      await expect(
+        service.getAvailabilityByDate(999, '2026-06-15'),
+      ).rejects.toThrow(NotFoundException);
     });
 
     it('should return custom overrides if present', async () => {

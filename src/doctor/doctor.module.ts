@@ -10,7 +10,11 @@ import { UsersModule } from '../users/users.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Doctor, RecurringAvailability, CustomAvailability]),
+    TypeOrmModule.forFeature([
+      Doctor,
+      RecurringAvailability,
+      CustomAvailability,
+    ]),
     UsersModule,
   ],
   controllers: [DoctorController],

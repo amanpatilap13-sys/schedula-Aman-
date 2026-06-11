@@ -167,7 +167,9 @@ export class DoctorService {
       dateObj.getUTCMonth() !== month ||
       dateObj.getUTCDate() !== day
     ) {
-      throw new BadRequestException('Provided date does not exist on the calendar');
+      throw new BadRequestException(
+        'Provided date does not exist on the calendar',
+      );
     }
 
     return days[dateObj.getUTCDay()];
@@ -176,7 +178,9 @@ export class DoctorService {
   private validateTimeSlot(startTime: string, endTime: string) {
     const timeRegex = /^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/;
     if (!timeRegex.test(startTime) || !timeRegex.test(endTime)) {
-      throw new BadRequestException('Invalid time format. Expected HH:MM in 24-hour format');
+      throw new BadRequestException(
+        'Invalid time format. Expected HH:MM in 24-hour format',
+      );
     }
 
     const [startH, startM] = startTime.split(':').map(Number);

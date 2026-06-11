@@ -28,7 +28,8 @@ export class CreateCustomOverrideDto {
 
   @ApiProperty({
     type: [CustomOverrideSlotDto],
-    description: 'List of custom availability time windows. Send empty array for complete unavailability on this date.',
+    description:
+      'List of custom availability time windows. Send empty array for complete unavailability on this date.',
   })
   @IsArray()
   @ValidateNested({ each: true })
