@@ -12,7 +12,10 @@ import { DoctorModule } from './doctor/doctor.module';
 import { User } from './users/user.entity';
 import { Doctor } from './doctor/doctor.entity';
 import { Patient } from './patient/patient.entity';
+import { RecurringAvailability } from './doctor/recurring-availability.entity';
+import { CustomAvailability } from './doctor/custom-availability.entity';
 import { InitialSchema1780918005000 } from './migrations/1780918005000-InitialSchema';
+import { DoctorAvailability1780918006000 } from './migrations/1780918006000-DoctorAvailability';
 
 const getDatabaseConfig = () => {
   const dbUrl = process.env.DATABASE_URL;
@@ -20,7 +23,7 @@ const getDatabaseConfig = () => {
     return {
       type: 'postgres' as const,
       url: dbUrl,
-      entities: [User, Doctor, Patient],
+      entities: [User, Doctor, Patient, RecurringAvailability, CustomAvailability],
       synchronize: true, // Use synchronize for Postgres on hosted DBs since SQLite migrations are dialect-specific
       ssl: {
         rejectUnauthorized: false, // Required for hosted providers like Neon or Supabase
@@ -31,8 +34,8 @@ const getDatabaseConfig = () => {
   return {
     type: 'better-sqlite3' as const,
     database: 'db.sqlite',
-    entities: [User, Doctor, Patient],
-    migrations: [InitialSchema1780918005000],
+    entities: [User, Doctor, Patient, RecurringAvailability, CustomAvailability],
+    migrations: [InitialSchema1780918005000, DoctorAvailability1780918006000],
     migrationsRun: true,
     synchronize: false,
   };
