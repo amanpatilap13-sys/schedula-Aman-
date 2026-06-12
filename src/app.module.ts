@@ -19,7 +19,6 @@ import { AppointmentModule } from './appointment/appointment.module';
 import { InitialSchema1780918005000 } from './migrations/1780918005000-InitialSchema';
 import { DoctorAvailability1780918006000 } from './migrations/1780918006000-DoctorAvailability';
 import { CreateAppointmentSchema1780918007000 } from './migrations/1780918007000-CreateAppointmentSchema';
-import { ChangeAgeToDob1780918008000 } from './migrations/1780918008000-ChangeAgeToDob';
 
 const getDatabaseConfig = () => {
   const dbUrl = process.env.DATABASE_URL;
@@ -60,7 +59,6 @@ const getDatabaseConfig = () => {
       InitialSchema1780918005000,
       DoctorAvailability1780918006000,
       CreateAppointmentSchema1780918007000,
-      ChangeAgeToDob1780918008000,
     ],
     migrationsRun: true,
     synchronize: false,

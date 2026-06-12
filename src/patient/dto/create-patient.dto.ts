@@ -1,4 +1,4 @@
-import { IsString, IsOptional, Matches } from 'class-validator';
+import { IsString, IsNumber, IsOptional } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreatePatientDto {
@@ -6,10 +6,9 @@ export class CreatePatientDto {
   @IsString()
   fullName: string;
 
-  @ApiProperty({ example: '1998-06-20', description: 'Date of Birth of the patient (YYYY-MM-DD)' })
-  @IsString()
-  @Matches(/^\d{4}-\d{2}-\d{2}$/, { message: 'dob must be in YYYY-MM-DD format' })
-  dob: string;
+  @ApiProperty({ example: 28, description: 'Age of the patient' })
+  @IsNumber()
+  age: number;
 
   @ApiProperty({ example: 'Female', description: 'Gender of the patient' })
   @IsString()

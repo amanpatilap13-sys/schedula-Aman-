@@ -17,7 +17,7 @@ export class Patient {
   fullName: string;
 
   @Column()
-  dob: string; // 'YYYY-MM-DD'
+  age: number;
 
   @Column()
   gender: string;
