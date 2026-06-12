@@ -18,7 +18,11 @@ export class CreatePatientDto {
   @IsString()
   contactDetails: string;
 
-  @ApiProperty({ example: 'No chronic conditions, allergic to penicillin', required: false, description: 'Medical history or details' })
+  @ApiProperty({
+    example: 'No chronic conditions, allergic to penicillin',
+    required: false,
+    description: 'Medical history or details',
+  })
   @IsOptional()
   @IsString()
   healthInfo?: string;

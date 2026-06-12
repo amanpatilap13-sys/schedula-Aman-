@@ -7,7 +7,12 @@ import {
   Request,
   UseGuards,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiBearerAuth,
+} from '@nestjs/swagger';
 
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
@@ -27,8 +32,13 @@ export class PatientController {
   constructor(private readonly patientService: PatientService) {}
 
   @Post('profile')
-  @ApiOperation({ summary: 'Create patient profile (Authenticated Patient only)' })
-  @ApiResponse({ status: 201, description: 'Patient profile created successfully.' })
+  @ApiOperation({
+    summary: 'Create patient profile (Authenticated Patient only)',
+  })
+  @ApiResponse({
+    status: 201,
+    description: 'Patient profile created successfully.',
+  })
   @ApiResponse({ status: 401, description: 'Unauthorized.' })
   @ApiResponse({ status: 409, description: 'Patient profile already exists.' })
   createProfile(
@@ -39,8 +49,13 @@ export class PatientController {
   }
 
   @Get('profile')
-  @ApiOperation({ summary: 'Get current patient profile (Authenticated Patient only)' })
-  @ApiResponse({ status: 200, description: 'Patient profile retrieved successfully.' })
+  @ApiOperation({
+    summary: 'Get current patient profile (Authenticated Patient only)',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Patient profile retrieved successfully.',
+  })
   @ApiResponse({ status: 401, description: 'Unauthorized.' })
   @ApiResponse({ status: 404, description: 'Patient profile not found.' })
   getProfile(@Request() req: { user: { sub: number } }) {
@@ -48,8 +63,13 @@ export class PatientController {
   }
 
   @Patch('profile')
-  @ApiOperation({ summary: 'Update patient profile (Authenticated Patient only)' })
-  @ApiResponse({ status: 200, description: 'Patient profile updated successfully.' })
+  @ApiOperation({
+    summary: 'Update patient profile (Authenticated Patient only)',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Patient profile updated successfully.',
+  })
   @ApiResponse({ status: 401, description: 'Unauthorized.' })
   @ApiResponse({ status: 404, description: 'Patient profile not found.' })
   updateProfile(
