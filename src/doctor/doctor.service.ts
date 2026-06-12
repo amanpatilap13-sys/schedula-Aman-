@@ -11,6 +11,7 @@ import { Repository } from 'typeorm';
 import { Doctor } from './doctor.entity';
 import { RecurringAvailability } from './recurring-availability.entity';
 import { CustomAvailability } from './custom-availability.entity';
+import { Appointment } from '../appointment/appointment.entity';
 import { UsersService } from '../users/users.service';
 import { CreateDoctorDto } from './dto/create-doctor.dto';
 import { UpdateDoctorDto } from './dto/update-doctor.dto';
@@ -31,6 +32,9 @@ export class DoctorService {
 
     @InjectRepository(CustomAvailability)
     private customAvailabilityRepository: Repository<CustomAvailability>,
+
+    @InjectRepository(Appointment)
+    private appointmentRepository: Repository<Appointment>,
 
     private usersService: UsersService,
   ) {}
@@ -484,5 +488,117 @@ export class DoctorService {
         endTime: r.endTime,
       })),
     };
+  }
+
+  async generateSlotsForDoctor(
+    doctorId: number,
+    dateString: string,
+    durationStr: string,
+  ) {
+    const doctor = await this.doctorRepository.findOne({
+      where: { id: doctorId },
+    });
+    if (!doctor) {
+      throw new NotFoundException('Doctor not found');
+    }
+
+    // Reuse getDayOfWeek for format and calendar date validation
+    this.getDayOfWeek(dateString);
+
+    // Ensure date is not in the past relative to current local date
+    const now = new Date();
+    const todayYear = now.getFullYear();
+    const todayMonth = now.getMonth() + 1;
+    const todayDay = now.getDate();
+
+    const [inputYear, inputMonth, inputDay] = dateString.split('-').map(Number);
+
+    if (
+      inputYear < todayYear ||
+      (inputYear === todayYear && inputMonth < todayMonth) ||
+      (inputYear === todayYear && inputMonth === todayMonth && inputDay < todayDay)
+    ) {
+      throw new BadRequestException('Date cannot be in the past');
+    }
+
+    const duration = parseInt(durationStr, 10);
+    if (isNaN(duration) || duration <= 0) {
+      throw new BadRequestException('Invalid slot duration');
+    }
+
+    const availability = await this.getAvailabilityByDate(doctorId, dateString);
+
+    if (!availability.slots || availability.slots.length === 0) {
+      throw new NotFoundException(
+        'No availability defined for this doctor on the selected date',
+      );
+    }
+
+    const allSlots: { startTime: string; endTime: string }[] = [];
+    for (const window of availability.slots) {
+      const [startH, startM] = window.startTime.split(':').map(Number);
+      const [endH, endM] = window.endTime.split(':').map(Number);
+
+      let currentMin = startH * 60 + startM;
+      const endMin = endH * 60 + endM;
+
+      while (currentMin + duration <= endMin) {
+        const startHStr = String(Math.floor(currentMin / 60)).padStart(2, '0');
+        const startMStr = String(currentMin % 60).padStart(2, '0');
+        const nextMin = currentMin + duration;
+        const endHStr = String(Math.floor(nextMin / 60)).padStart(2, '0');
+        const endMStr = String(nextMin % 60).padStart(2, '0');
+
+        allSlots.push({
+          startTime: `${startHStr}:${startMStr}`,
+          endTime: `${endHStr}:${endMStr}`,
+        });
+
+        currentMin += duration;
+      }
+    }
+
+    // Filter out past slots if date is today
+    const isToday =
+      inputYear === todayYear &&
+      inputMonth === todayMonth &&
+      inputDay === todayDay;
+    let filteredSlots = allSlots;
+
+    if (isToday) {
+      const currentHour = now.getHours();
+      const currentMinute = now.getMinutes();
+      filteredSlots = filteredSlots.filter((slot) => {
+        const [slotH, slotM] = slot.startTime.split(':').map(Number);
+        return (
+          slotH > currentHour ||
+          (slotH === currentHour && slotM > currentMinute)
+        );
+      });
+    }
+
+    // Fetch booked appointments to filter them out
+    const bookedAppointments = await this.appointmentRepository.find({
+      where: {
+        doctor: { id: doctorId },
+        date: dateString,
+        status: 'booked',
+      },
+    });
+
+    filteredSlots = filteredSlots.filter((slot) => {
+      const isBooked = bookedAppointments.some(
+        (app) => slot.startTime < app.endTime && app.startTime < slot.endTime,
+      );
+      return !isBooked;
+    });
+
+    if (filteredSlots.length === 0) {
+      throw new NotFoundException(
+        'No available slots for this doctor on the selected date',
+      );
+    }
+
+    return filteredSlots;
   }
 }

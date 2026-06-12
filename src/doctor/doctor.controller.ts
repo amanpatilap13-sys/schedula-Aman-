@@ -309,7 +309,22 @@ export class DoctorController {
     }
     return this.doctorService.getAvailabilityByDate(doctorId, date);
   }
-    @Get(':id')
+  @Get(':id/slots')
+  @ApiOperation({ summary: 'Get available slots for a doctor on a specific date' })
+  @ApiQuery({ name: 'date', required: true, example: '2026-06-20', description: 'Date in YYYY-MM-DD format' })
+  @ApiQuery({ name: 'duration', required: true, example: '15', description: 'Slot duration in minutes' })
+  @ApiResponse({ status: 200, description: 'List of available slots.' })
+  @ApiResponse({ status: 400, description: 'Invalid date, past date, or invalid duration.' })
+  @ApiResponse({ status: 404, description: 'Doctor not found, no availability, or no slots available.' })
+  generateSlotsForDoctor(
+    @Param('id', ParseIntPipe) id: number,
+    @Query('date') date: string,
+    @Query('duration') duration: string,
+  ) {
+    return this.doctorService.generateSlotsForDoctor(id, date, duration);
+  }
+
+  @Get(':id')
   @ApiOperation({ summary: 'Get doctor details by ID' })
   @ApiResponse({
     status: 200,

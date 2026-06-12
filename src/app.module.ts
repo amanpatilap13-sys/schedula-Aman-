@@ -14,8 +14,11 @@ import { Doctor } from './doctor/doctor.entity';
 import { Patient } from './patient/patient.entity';
 import { RecurringAvailability } from './doctor/recurring-availability.entity';
 import { CustomAvailability } from './doctor/custom-availability.entity';
+import { Appointment } from './appointment/appointment.entity';
+import { AppointmentModule } from './appointment/appointment.module';
 import { InitialSchema1780918005000 } from './migrations/1780918005000-InitialSchema';
 import { DoctorAvailability1780918006000 } from './migrations/1780918006000-DoctorAvailability';
+import { CreateAppointmentSchema1780918007000 } from './migrations/1780918007000-CreateAppointmentSchema';
 
 const getDatabaseConfig = () => {
   const dbUrl = process.env.DATABASE_URL;
@@ -32,6 +35,7 @@ const getDatabaseConfig = () => {
         Patient,
         RecurringAvailability,
         CustomAvailability,
+        Appointment,
       ],
       synchronize: true, // Use synchronize for Postgres on hosted DBs since SQLite migrations are dialect-specific
       ssl: {
@@ -49,8 +53,13 @@ const getDatabaseConfig = () => {
       Patient,
       RecurringAvailability,
       CustomAvailability,
+      Appointment,
     ],
-    migrations: [InitialSchema1780918005000, DoctorAvailability1780918006000],
+    migrations: [
+      InitialSchema1780918005000,
+      DoctorAvailability1780918006000,
+      CreateAppointmentSchema1780918007000,
+    ],
     migrationsRun: true,
     synchronize: false,
   };
@@ -64,6 +73,7 @@ const getDatabaseConfig = () => {
     UsersModule,
     PatientModule,
     DoctorModule,
+    AppointmentModule,
   ],
   controllers: [AppController],
   providers: [AppService],
